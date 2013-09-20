@@ -1,3 +1,5 @@
+#!/bin/bash 
+#
 # Reithproxies script = sets up my mac for working on or off Reith
 
 if [ "x$1" != "xon" ] && [ "x$1" != "xoff" ]; then 
