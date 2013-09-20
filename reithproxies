@@ -1,3 +1,31 @@
 # Reithproxies script = sets up my mac for working on or off Reith
 
+if [ "x$1" != "xon" ] && [ "x$1" != "xoff" ]; then 
+    echo "Usage: $0 <on/off>"
+    exit 1
+fi
 
+# Always use my .bashrc 
+source ~/.bashrc
+
+if [ "${1}"  == "on" ]; then
+     echo "Adding Reith proxy env variables"
+    source ~/.reithproxies
+
+    echo "Changing SVN settings"
+    ln -sf /Volumes/SecureDrive/subversion/servers.work /Volumes/SecureDrive/subversion/servers
+
+    echo "Switching to On Network"
+    sudo networksetup -switchtolocation "BBC On Network"
+fi
+
+if [ "${1}"  == "off" ]; then
+    echo "Removing any Reith proxy settings"
+    source ~/.removeproxies
+
+    echo "Changing SVN settings"
+    ln -sf /Volumes/SecureDrive/subversion/servers.home /Volumes/SecureDrive/subversion/servers
+
+    echo "Switching to Off Network"
+    sudo networksetup -switchtolocation "BBC Off Network"
+fi
