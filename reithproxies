@@ -13,32 +13,26 @@ fi
 # Stop stunnel
 killall stunnel
 
-if [ "${1}"  == "on" ]; then
-     echo "Adding Reith proxy env variables"
-    . ~/.reithproxies
-
-    echo "Changing SVN settings"
-    ln -sf /Volumes/SecureDrive/subversion/servers.work /Volumes/SecureDrive/subversion/servers
-
-    echo "Changing Stunnel settings"
-    ln -sf /Volumes/SecureDrive/stunnel/stunnel-work.conf /Volumes/SecureDrive/stunnel/stunnel.conf
-    stunnel
-
-    echo "Switching to On Network"
-    sudo networksetup -switchtolocation "BBC On Network"
-fi
+localeName=work
+networkLocation=On
 
 if [ "${1}"  == "off" ]; then
-    echo "Removing any Reith proxy settings"
+    localeName=home
+    networkLocation=Off
+
+    echo "Removing Reith proxy env variables"
     . ~/.removeproxies
-
-    echo "Changing SVN settings"
-    ln -sf /Volumes/SecureDrive/subversion/servers.home /Volumes/SecureDrive/subversion/servers
-
-    echo "Changing Stunnel settings"
-    ln -sf /Volumes/SecureDrive/stunnel/stunnel-home.conf /Volumes/SecureDrive/stunnel/stunnel.conf
-    stunnel
-
-    echo "Switching to Off Network"
-    sudo networksetup -switchtolocation "BBC Off Network"
+else 
+    echo "Adding Reith proxy env variables"
+    . ~/.reithproxies
 fi
+
+echo "Changing SVN settings"
+ln -sf /Volumes/SecureDrive/subversion/servers.$localeName /Volumes/SecureDrive/subversion/servers
+
+echo "Changing Stunnel settings"
+ln -sf /Volumes/SecureDrive/stunnel/stunnel-$localeName.conf /Volumes/SecureDrive/stunnel/stunnel.conf
+stunnel
+
+echo "Switching Network Location"
+sudo networksetup -switchtolocation "BBC $networkLocation Network"
