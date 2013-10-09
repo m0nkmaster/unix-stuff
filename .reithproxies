@@ -1,0 +1,7 @@
+export http_proxy=http://www-cache.reith.bbc.co.uk:80
+export https_proxy=$http_proxy
+export all_proxy=$http_proxy
+export https_proxy=$http_proxy
+git config --global http.proxy $http_proxy
+git config --global core.gitproxy $http_proxy
+export no_proxy=*.bbc.co.uk,localhost,127.0.0.1
