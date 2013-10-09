@@ -1,3 +1,5 @@
+#!/bin/sh 
+echo "Removing Reith proxy env variables"
 unset http_proxy
 unset https_proxy
 unset all_proxy

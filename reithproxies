@@ -13,14 +13,12 @@ select yn in "${options[@]}"
 do
     case $yn in
         "y")
-            echo "Adding Reith proxy env variables"
             . ~/.reithproxies
             break
             ;;
         "n")
             localeName=home
             networkLocation=Off
-            echo "Removing Reith proxy env variables"
             . ~/.removeproxies
             break
             ;;
