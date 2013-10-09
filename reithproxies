@@ -1,31 +1,41 @@
-#!/bin/bash 
+#!/bin/sh 
 #
 # Reithproxies script = sets up my mac for working on or off Reith
 
-if [ "x$1" != "xon" ] && [ "x$1" != "xoff" ]; then 
-    echo "Usage: $0 <on/off>"
-    exit 1
-fi
 
-# Always use my .bashrc 
-. ~/.bashrc
+# defaults
+localeName=work
+networkLocation=On
+
+PS3="Are you on the Reith network (enter 1 or 2)?"
+options=("y" "n")
+select yn in "${options[@]}"
+do
+    case $yn in
+        "y")
+            echo "Adding Reith proxy env variables"
+            . ~/.reithproxies
+            break
+            ;;
+        "n")
+            localeName=home
+            networkLocation=Off
+            echo "Removing Reith proxy env variables"
+            . ~/.removeproxies
+            break
+            ;;
+        *)
+            echo 'Incorrect selection, try again...'
+            echo $yn
+            ;;
+    esac
+done
 
 # Stop stunnel
 killall stunnel
 
-localeName=work
-networkLocation=On
-
-if [ "${1}"  == "off" ]; then
-    localeName=home
-    networkLocation=Off
-
-    echo "Removing Reith proxy env variables"
-    . ~/.removeproxies
-else 
-    echo "Adding Reith proxy env variables"
-    . ~/.reithproxies
-fi
+# Always use my .bashrc 
+. ~/.bashrc
 
 echo "Changing SVN settings"
 ln -sf /Volumes/SecureDrive/subversion/servers.$localeName /Volumes/SecureDrive/subversion/servers

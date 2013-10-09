@@ -1,0 +1,67 @@
+#!/bin/bash 
+#
+# Turns reith proxies on or off
+#
+
+CURRENT_SETTING_FILE=/var/tmp/reithproxies
+
+if [ "x$1" != "xon" ] && [ "x$1" != "xoff" ]; then 
+  	echo "Usage: $0 <on/off>"
+	exit 1
+fi
+
+if [ -f "$CURRENT_SETTING_FILE" ]; then
+	CURRENT_SETTING=$(cat $CURRENT_SETTING_FILE)
+
+	if [ "x${CURRENT_SETTING}" = "x${1}" ]; then
+		echo "Proxies are already turned ${1}"
+		echo "Remove $CURRENT_SETTING_FILE to force"
+		read -p "type 'f' to perform removal now and continue, any other key to keep current proxy settings"
+		if [[ $REPLY != "f" ]]; then
+			echo ""
+			exit 1
+		else
+			echo "removing $CURRENT_SETTING_FILE"
+			rm $CURRENT_SETTING_FILE
+		fi
+	fi
+fi	
+	
+echo "${1}" > $CURRENT_SETTING_FILE
+/bin/cp /etc/bbc/proxy.conf /etc/bbc/proxy.conf.bk
+/bin/cp /root/.subversion/servers /root/.subversion/servers.bk
+
+if [ "${1}" = "on" ]; then
+	# Turn on shell proxy variables proxies
+	/bin/grep -Ev "export np_(http|https|ftp)_(proxy|non_proxy_hosts)=''" /etc/bbc/proxy.conf > /etc/bbc/proxy.conf.tmp
+	/bin/cat /etc/bbc/proxy.conf.tmp > /etc/bbc/proxy.conf
+	
+	# turn on subversion proxies
+	/bin/sed -i 's/^# http-proxy-host = www-cache/http-proxy-host = www-cache/' /root/.subversion/servers
+	
+	# profile 
+	/bin/sed -i 's/configure_proxies=[01]/configure_proxies=1/' /root/.bash_profile
+	
+	# Set proxies on in PEAR installer
+	echo -n "PEAR: "
+	/usr/bin/pear config-set http_proxy "http://www-cache.reith.bbc.co.uk:80" > /dev/null 2>&1
+else
+	echo "export np_http_proxy=''"  >> /etc/bbc/proxy.conf
+	echo "export np_https_proxy=''" >> /etc/bbc/proxy.conf
+	echo "export np_ftp_proxy=''"   >> /etc/bbc/proxy.conf
+	echo "export np_http_non_proxy_hosts=''" >> /etc/bbc/proxy.conf
+    	echo "export np_https_non_proxy_hosts=''" >> /etc/bbc/proxy.conf
+
+	# turn on subversion proxies
+	/bin/sed -i 's/^http-proxy-host = www-cache/# http-proxy-host = www-cache/' /root/.subversion/servers
+	
+	# profile 
+	/bin/sed -i 's/configure_proxies=[01]/configure_proxies=0/' /root/.bash_profile > /dev/null 2>&1
+	
+	echo -n "PEAR: "
+	# Turn on proxies in pear installer
+	[[ -x /usr/bin/pear ]] && /usr/bin/pear config-set http_proxy ""
+fi
+
+echo "Proxies are now turned ${1}. Logout and login to make sure environment is set properly"
+
