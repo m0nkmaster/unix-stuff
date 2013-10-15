@@ -2,27 +2,34 @@
 #
 # Reithproxies script = sets up my mac for working on or off Reith
 
-networkLocation=$(networksetup -getcurrentlocation)
-if [ "$networkLocation" = "BBC On Network" ]
+url='google.com'
+curl $url > /dev/null 2>&1
+if [[ $? -gt 0 ]]
 then
-    echo "BBC On Network"
-    localeName=work
-    . ~/.reithproxies
-else
-    echo "BBC Off Network"
-    localeName=home
-    . ~/.removeproxies
+    networkLocation=$(networksetup -getcurrentlocation)
+    if [ "$networkLocation" = "BBC Off Network" ]
+    then
+        echo "BBC On Network"
+        networksetup -switchtolocation "BBC On Network"
+        localeName=work
+        . ~/.reithproxies
+    else
+        echo "BBC Off Network"
+        networksetup -switchtolocation "BBC Off Network"
+        localeName=home
+        . ~/.removeproxies
+    fi
+
+    # Stop stunnel
+    killall stunnel
+
+    # Always use my .bashrc 
+    . ~/.bashrc
+
+    echo "Changing SVN settings"
+    ln -sf /Volumes/SecureDrive/subversion/servers.$localeName /Volumes/SecureDrive/subversion/servers
+
+    echo "Changing Stunnel settings"
+    ln -sf /Volumes/SecureDrive/stunnel/stunnel-$localeName.conf /Volumes/SecureDrive/stunnel/stunnel.conf
+    stunnel
 fi
-
-# Stop stunnel
-killall stunnel
-
-# Always use my .bashrc 
-. ~/.bashrc
-
-echo "Changing SVN settings"
-ln -sf /Volumes/SecureDrive/subversion/servers.$localeName /Volumes/SecureDrive/subversion/servers
-
-echo "Changing Stunnel settings"
-ln -sf /Volumes/SecureDrive/stunnel/stunnel-$localeName.conf /Volumes/SecureDrive/stunnel/stunnel.conf
-stunnel
