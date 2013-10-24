@@ -11,6 +11,7 @@ stateFile=".onoffreith"
 touch ~/"$stateFile"
 currentState=`less ~/$stateFile`
 changeProxies=false
+hdiutil attach ~/SecureDrive.dmg
 
 # ON NETWORK SETTINGS
 if [[ "$networkLocation" = "BBC On Network" && "$currentState" != "on" ]]
