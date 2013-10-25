@@ -26,6 +26,7 @@ then
     changeProxies=true
     localeName=work
     . ~/.reithproxies
+    volume=1
 fi
 
 # OFF NETWORK SETTINGS
@@ -36,12 +37,16 @@ then
     changeProxies=true
     localeName=home
     . ~/.removeproxies
+    volume=10
 fi
 
 if [ $changeProxies = true ]
 then 
     # Stop stunnel
     killall stunnel
+
+    # Set volume
+    osascript -e "set Volume $volume"
 
     echo "Changing SVN settings"
     ln -sf /Volumes/SecureDrive/subversion/servers.$localeName /Volumes/SecureDrive/subversion/servers
