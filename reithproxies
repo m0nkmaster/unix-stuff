@@ -8,15 +8,20 @@
 # Prepare the ground work
 networkLocation=$(networksetup -getcurrentlocation)
 stateFile=".onoffreith"
+secureFile="/Volumes/SecureDrive/ca.pem"
 touch ~/"$stateFile"
 currentState=`less ~/$stateFile`
 changeProxies=false
-hdiutil attach ~/SecureDrive.dmg
+
+if [ ! -e "$secureFile" ]
+then
+    hdiutil attach ~/SecureDrive.dmg
+fi
 
 # ON NETWORK SETTINGS
 if [[ "$networkLocation" = "BBC On Network" && "$currentState" != "on" ]]
 then
-    echo "BBC On Network"
+    msg="BBC On Network"
     `echo "on" > ~/$stateFile`
     changeProxies=true
     localeName=work
@@ -26,14 +31,14 @@ fi
 # OFF NETWORK SETTINGS
 if [[ "$networkLocation" = "BBC Off Network" && "$currentState" != "off" ]]
 then
-    echo "BBC Off Network"
+    msg="BBC Off Network"
     `echo "off" > ~/$stateFile`
     changeProxies=true
     localeName=home
     . ~/.removeproxies
 fi
 
-if [ $changeProxies == true ]
+if [ $changeProxies = true ]
 then 
     # Stop stunnel
     killall stunnel
@@ -44,4 +49,6 @@ then
     echo "Changing Stunnel settings"
     ln -sf /Volumes/SecureDrive/stunnel/stunnel-$localeName.conf /Volumes/SecureDrive/stunnel/stunnel.conf
     stunnel
+
+    terminal-notifier -message $msg -title "Reith Setup"
 fi
