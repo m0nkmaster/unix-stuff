@@ -37,7 +37,7 @@ then
     changeProxies=true
     localeName=home
     . ~/.removeproxies
-    volume=6
+    volume=3
 fi
 
 if [ $changeProxies = true ]
