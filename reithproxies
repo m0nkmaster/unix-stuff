@@ -13,30 +13,42 @@ touch ~/"$stateFile"
 currentState=`less ~/$stateFile`
 changeProxies=false
 
+# Is SecureDrive mounted?
 if [ ! -e "$secureFile" ]
 then
     hdiutil attach ~/SecureDrive.dmg
 fi
 
-# ON NETWORK SETTINGS
+# ON NETWORK SETTINGS - Always run
+if [[ "$networkLocation" = "BBC On Network" ]]
+then
+    . ~/.reithproxies
+fi
+
+# OFF NETWORK SETTINGS - Always run
+if [[ "$networkLocation" = "BBC Off Network" ]]
+then
+    . ~/.removeproxies
+fi
+
+
+# ON NETWORK SETTINGS - Only run if not already set
 if [[ "$networkLocation" = "BBC On Network" && "$currentState" != "on" ]]
 then
     msg="BBC On Network"
     `echo "on" > ~/$stateFile`
     changeProxies=true
     localeName=work
-    . ~/.reithproxies
     volume=1
 fi
 
-# OFF NETWORK SETTINGS
+# OFF NETWORK SETTINGS - Only run if not already set
 if [[ "$networkLocation" = "BBC Off Network" && "$currentState" != "off" ]]
 then
     msg="BBC Off Network"
     `echo "off" > ~/$stateFile`
     changeProxies=true
     localeName=home
-    . ~/.removeproxies
     volume=3
 fi
 
