@@ -19,13 +19,13 @@ fi
 # ON NETWORK SETTINGS - Always run
 if [[ "$networkLocation" = "BBC On Network" ]]
 then
-    ./.reithproxies
+    . ~/workspace/unix-stuff/.reithproxies
 fi
 
 # OFF NETWORK SETTINGS - Always run
 if [[ "$networkLocation" = "BBC Off Network" ]]
 then
-    ./.removeproxies
+    . ~/workspace/unix-stuff/.removeproxies
 fi
 
 
