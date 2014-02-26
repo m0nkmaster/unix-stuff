@@ -2,9 +2,6 @@
 #
 # Reithproxies script = sets up my mac for working ON or OFF Reith
 
-# Always use my .bashrc 
-. ~/.bashrc
-
 # Prepare the ground work
 networkLocation=$(networksetup -getcurrentlocation)
 stateFile=".onoffreith"
