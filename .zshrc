@@ -14,6 +14,7 @@ export TERM='xterm-256color'
 alias gcm="hub checkout master"
 alias gc="git checkout"
 alias git=hub
+alias pal='ssh root@pal.sandbox.dev.bbc.co.uk'
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -48,12 +49,10 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-# Adding my old bash scripts
-source ~/.bashrc
-source ~/.bash_profile
-
 # Proxy magic
 . reithproxies
 
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
 # Customize to your needs...
-export PATH=$PATH:/Users/macdor07/.rvm/gems/ruby-1.9.3-p392/bin:/Users/macdor07/.rvm/gems/ruby-1.9.3-p392@global/bin:/Users/macdor07/.rvm/rubies/ruby-1.9.3-p392/bin:/Users/macdor07/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/macdor07/.rvm/bin:/Users/macdor07/pear/bin:/Applications/AMPPS/php-5.5/bin
+export PATH=$PATH:$HOME/.rvm/bin:/Users/macdor07/.rvm/gems/ruby-1.9.3-p392/bin:/Users/macdor07/.rvm/gems/ruby-1.9.3-p392@global/bin:/Users/macdor07/.rvm/rubies/ruby-1.9.3-p392/bin:/Users/macdor07/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/macdor07/.rvm/bin:/Users/macdor07/pear/bin:/Applications/AMPPS/php-5.5/bin
