@@ -1,0 +1,39 @@
+#!/bin/sh 
+#
+# Get all the various code-bases which we need in BBC Sport
+
+cd ~/workspace
+
+# Clone all required git projects
+#################################
+#  Sport (core)
+git clone git@github.com:bbc-sport/onesport.git
+git clone git@github.com:bbc-sport/sport.git
+git clone git@github.com:bbc-sport/bbc-pal-library-onesport.git
+git clone git@github.com:bbc-sport/bbc-pal-library-sport.git
+git clone git@github.com:bbc-sport/sportui.git
+git clone git@github.com:bbc-sport/sportrouting.git
+
+#  Tooling
+git clone git@github.com:bbc-sport/smoker.git
+git clone git@github.com:bbc-sport/tools.git
+
+#  Live Experience
+git clone git@github.com:bbc-sport/liveexperience.git
+
+# Checkout all the svn projects
+###############################
+#  Monitoring
+svn co https://repo.dev.bbc.co.uk/tools/zenoss/kpireports/ kpireports
+svn co https://repo.dev.bbc.co.uk/tools/zenoss/live-monitoring-configs/ live-monitoring-configs
+
+#  CPS / Legacy code
+svn co https://repo.dev.bbc.co.uk/cps/cps-server-refrito/trunk/velocity-templates/ velocity-templates
+svn co https://repo.dev.bbc.co.uk/static/emp-journalism/trunk/ emp-journalism
+svn co https://repo.dev.bbc.co.uk/cps/cps-static/properties/ cps-properties
+svn co https://repo.dev.bbc.co.uk/cps/cps-static/inc cps-inc
+
+# Redirects / Apache configs
+svn co https://repo.dev.bbc.co.uk/infrastructure/ infrastructure
+
+
