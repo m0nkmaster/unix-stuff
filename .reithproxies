@@ -1,9 +1,83 @@
 #!/bin/sh 
-echo "Adding Reith proxy env variables"
-export http_proxy=http://www-cache.reith.bbc.co.uk:80
-export https_proxy=$http_proxy
-export all_proxy=$http_proxy
-export https_proxy=$http_proxy
-git config --global http.proxy $http_proxy
-git config --global core.gitproxy $http_proxy
-export no_proxy="*.bbc.co.uk,localhost,127.0.0.1"
+#
+# Reithproxies script = sets up my mac for working ON or OFF Reith
+
+# Prepare the ground work
+networkLocation=$(networksetup -getcurrentlocation)
+stateFile=".onoffreith"
+secureFile="/Volumes/SecureDrive/ca.pem"
+touch ~/"$stateFile"
+currentState=`less ~/$stateFile`
+changeProxies=false
+
+echo $networkLocation" so..."
+
+# Is SecureDrive mounted?
+if [ ! -e "$secureFile" ]
+then
+    hdiutil attach ~/SecureDrive.dmg
+fi
+
+# ON NETWORK SETTINGS - Always run
+if [[ "$networkLocation" = "BBC On Network" ]]
+then
+    echo "Adding Reith proxy env variables"
+    export http_proxy=http://www-cache.reith.bbc.co.uk:80
+    export https_proxy=$http_proxy
+    export all_proxy=$http_proxy
+    export https_proxy=$http_proxy
+    git config --global http.proxy $http_proxy
+    git config --global core.gitproxy $http_proxy
+    export no_proxy="*.bbc.co.uk,localhost,127.0.0.1" 
+fi
+
+# OFF NETWORK SETTINGS - Always run
+if [[ "$networkLocation" = "BBC Off Network" ]]
+    echo "Removing Reith proxy env variables"
+    unset http_proxy
+    unset https_proxy
+    unset all_proxy
+    unset https_proxy
+    git config --global --unset http.proxy
+    git config --global --unset core.gitproxy
+then
+fi
+
+
+# ON NETWORK SETTINGS - Only run if not already set
+if [[ "$networkLocation" = "BBC On Network" && "$currentState" != "on" ]]
+then
+    msg="BBC On Network"
+    `echo "on" > ~/$stateFile`
+    changeProxies=true
+    localeName=work
+    volume=1
+fi
+
+# OFF NETWORK SETTINGS - Only run if not already set
+if [[ "$networkLocation" = "BBC Off Network" && "$currentState" != "off" ]]
+then
+    msg="BBC Off Network"
+    `echo "off" > ~/$stateFile`
+    changeProxies=true
+    localeName=home
+    volume=3
+fi
+
+if [ $changeProxies = true ]
+then 
+    # Stop stunnel
+    killall stunnel
+
+    # Set volume
+    osascript -e "set Volume $volume"
+
+    echo "Changing SVN settings"
+    ln -sf /Volumes/SecureDrive/subversion/servers.$localeName /Volumes/SecureDrive/subversion/servers
+
+    echo "Changing Stunnel settings"
+    ln -sf /Volumes/SecureDrive/stunnel/stunnel-$localeName.conf /Volumes/SecureDrive/stunnel/stunnel.conf
+    stunnel
+
+    terminal-notifier -message $msg -title "Reith Setup"
+fi

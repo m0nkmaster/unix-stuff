@@ -17,6 +17,9 @@ alias git=hub
 alias pal='ssh root@pal.sandbox.dev.bbc.co.uk'
 alias reithproxies='. ~/workspace/unix-stuff/.reithproxies'
 
+# Proxy magic
+reithproxies
+
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
 
@@ -49,9 +52,6 @@ alias reithproxies='. ~/workspace/unix-stuff/.reithproxies'
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-
-# Proxy magic
-. reithproxies
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
