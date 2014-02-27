@@ -15,7 +15,6 @@ alias gcm="hub checkout master"
 alias gc="git checkout"
 alias git=hub
 alias pal='ssh root@pal.sandbox.dev.bbc.co.uk'
-alias reithproxies='. ~/workspace/unix-stuff/.reithproxies'
 
 # Proxy magic
 reithproxies

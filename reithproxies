@@ -33,6 +33,7 @@ fi
 
 # OFF NETWORK SETTINGS - Always run
 if [[ "$networkLocation" = "BBC Off Network" ]]
+thenthen
     echo "Removing Reith proxy env variables"
     unset http_proxy
     unset https_proxy
@@ -40,7 +41,6 @@ if [[ "$networkLocation" = "BBC Off Network" ]]
     unset https_proxy
     git config --global --unset http.proxy
     git config --global --unset core.gitproxy
-then
 fi
 
 
