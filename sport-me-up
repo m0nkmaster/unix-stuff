@@ -16,7 +16,7 @@ git clone git@github.com:bbc-sport/sportrouting.git
 
 #  Tooling
 git clone git@github.com:bbc-sport/smoker.git
-git clone git@github.com:bbc-sport/tools.git
+git clone git@github.com:bbc-sport/tooling.git
 
 #  Live Experience
 git clone git@github.com:bbc-sport/liveexperience.git
