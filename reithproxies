@@ -33,7 +33,7 @@ fi
 
 # OFF NETWORK SETTINGS - Always run
 if [[ "$networkLocation" = "BBC Off Network" ]]
-thenthen
+then
     echo "Removing Reith proxy env variables"
     unset http_proxy
     unset https_proxy
