@@ -23,6 +23,7 @@ if [[ "$networkLocation" = "BBC On Network" ]]
 then
     echo "Adding Reith proxy env variables"
     export http_proxy=http://www-cache.reith.bbc.co.uk:80
+    export rvm_proxy=http://www-cache.reith.bbc.co.uk:80
     export https_proxy=$http_proxy
     export all_proxy=$http_proxy
     export https_proxy=$http_proxy
@@ -39,6 +40,7 @@ then
     unset https_proxy
     unset all_proxy
     unset https_proxy
+    unset rvm_proxy
     git config --global --unset http.proxy
     git config --global --unset core.gitproxy
 fi
