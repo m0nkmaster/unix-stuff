@@ -15,6 +15,7 @@ alias gcm="hub checkout master"
 alias gc="git checkout"
 alias git=hub
 alias pal='ssh root@pal.sandbox.dev.bbc.co.uk'
+alias sportgit='cd ~/workspace/sport;git pull -p;cd ~/workspace/onesport;git pull -p;cd ~/workspace/sportrouting;git pull -p;cd ~/workspace/bbc-pal-library-sport;git pull -p;cd ~/workspace/bbc-pal-library-onesport;git pull -p;cd ~/workspace/sportui;git pull -p;'
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
